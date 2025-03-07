@@ -210,11 +210,6 @@ window.Quarto = {
 </header>
 
 
-<div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'shiny' was built under R version 4.3.3</code></pre>
-</div>
-</div>
 <section id="foundations-for-statistical-inference---confidence-intervals" class="level1">
 <h1>Foundations for statistical inference - Confidence intervals</h1>
 <p>If you have access to data on an entire population, say the opinion of every adult in the United States on whether or not they think climate change is affecting their local community, it’s straightforward to answer questions like, “What percent of US adults think climate change is affecting their local community?”. Similarly, if you had demographic information on the population you could examine how, if at all, this opinion varies among young and old adults and adults with different leanings. If you have access to only a sample of the population, as is often the case, the task becomes more complicated. What is your best guess for this proportion if you only have data from a small sample of adults? This type of situation requires that you use your sample to make inference on what your population looks like.</p>
@@ -226,27 +221,9 @@ window.Quarto = {
 <p>In this lab, we will explore and visualize the data using the tidyverse suite of packages, and perform statistical inference using infer.</p>
 <p>Let’s load the packages. Remember: If you have not installed these packages before on your machine, you will first need to run<code>install.packages()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ggplot2' was built under R version 4.3.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openintro)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'openintro' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'airports' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'cherryblossom' was built under R version 4.3.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'usdata' was built under R version 4.3.3</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(infer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'infer' was built under R version 4.3.3</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openintro)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(infer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="the-data" class="level3">
@@ -259,32 +236,32 @@ window.Quarto = {
 <p>To keep our computation simple, we will assume a total population size of 100,000 (even though that’s smaller than the population size of all US adults).</p>
 <p>In this lab, you will assume this 62% is a true population proportion and learn about how sample proportions can vary from sample to sample by taking smaller samples from the population. We will first create our population assuming a population size of 100,000. This means 62,000 (62%) of the adult population think climate change impacts their community, and the remaining 38,000 does not think so.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>us_adults <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">climate_change_affects =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"Yes"</span>, <span class="dv">62000</span>), <span class="fu">rep</span>(<span class="st">"No"</span>, <span class="dv">38000</span>))</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>us_adults <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">climate_change_affects =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">"Yes"</span>, <span class="dv">62000</span>), <span class="fu">rep</span>(<span class="st">"No"</span>, <span class="dv">38000</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The name of the data frame is <code>us_adults</code> and the name of the variable that contains responses to the question <em>“Do you think climate change is affecting your local community?”</em> is <code>climate_change_affects</code>.</p>
 <p>We can quickly visualize the distribution of these responses using a bar plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(us_adults, <span class="fu">aes</span>(<span class="at">x =</span> climate_change_affects)) <span class="sc">+</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Do you think climate change is affecting your local community?"</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(us_adults, <span class="fu">aes</span>(<span class="at">x =</span> climate_change_affects)) <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Do you think climate change is affecting your local community?"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can also obtain summary statistics to confirm we constructed the data frame correctly.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>us_adults <span class="sc">|&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(climate_change_affects) <span class="sc">|&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> n <span class="sc">/</span><span class="fu">sum</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>us_adults <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(climate_change_affects) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> n <span class="sc">/</span><span class="fu">sum</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In this lab, you’ll start with a simple random sample of size 60 from the population.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">60</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>samp <span class="ot">&lt;-</span> us_adults <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="at">size =</span> n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">60</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>samp <span class="ot">&lt;-</span> us_adults <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="at">size =</span> n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -381,11 +358,11 @@ Find the confidence interval
 </table>
 <p>This code will find the 95 percent confidence interval for proportion of US adults who think climate change affects their local community.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>samp <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">response =</span> climate_change_affects, <span class="at">success =</span> <span class="st">"Yes"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"bootstrap"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"prop"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_ci</span>(<span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>samp <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">specify</span>(<span class="at">response =</span> climate_change_affects, <span class="at">success =</span> <span class="st">"Yes"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate</span>(<span class="at">reps =</span> <span class="dv">1000</span>, <span class="at">type =</span> <span class="st">"bootstrap"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calculate</span>(<span class="at">stat =</span> <span class="st">"prop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_ci</span>(<span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>In <code>specify</code> we specify the <code>response</code> variable and the level of that variable we are calling a <code>success</code>.</li>
@@ -430,93 +407,7 @@ Exercise 4
 <li>Calculate the sample proportion, and use these to calculate and store the lower and upper bounds of the confidence intervals.</li>
 <li>Repeat these steps 50 times.</li>
 </ul>
-<p>Doing this would require learning programming concepts like iteration so that you can automate repeating running the code you’ve developed so far many times to obtain many (50) confidence intervals. In order to keep the programming simpler, we are providing the interactive app below that basically does this for you and created a plot similar to Figure 5.6 on OpenIntro Statistics, 4th Edition (page 182).</p>
-<p>```{shinylive-r, echo=FALSE, eval=TRUE, results = TRUE} store_ci &lt;- function(i, n, reps, conf_level, success) { us_adults %&gt;% sample_n(size = n) %&gt;% specify(response = climate_change_affects, success = success) %&gt;% generate(reps, type = “bootstrap”) %&gt;% calculate(stat = “prop”) %&gt;% get_ci(level = conf_level) %&gt;% rename( x_lower = names(.)[1], x_upper = names(.)[2] ) }</p>
-<p>shinyApp( ui &lt;- fluidPage( h4(“Confidence intervals for the proportion of US adults who think climate change”),</p>
-<pre><code>h4(selectInput("success", "",
-  choices = c(
-    "is affecting their local community" = "Yes",
-    "is not affecting their local community" = "No"
-  ),
-  selected = "Yes", width = "50%"
-)),
-
-# Sidebar with a slider input for number of bins
-sidebarLayout(
-  sidebarPanel(
-    numericInput("n_samp",
-      "Sample size for a single sample from the population:",
-      min = 1,
-      max = 1000,
-      value = 60
-    ),
-
-    hr(),
-
-    numericInput("n_rep",
-      "Number of resamples for each bootstrap confidence interval:",
-      min = 1,
-      max = 15000,
-      value = 1000
-    ),
-
-    numericInput("conf_level",
-      "Confidence level",
-      min = 0.01,
-      max = 0.99,
-      value = 0.95,
-      step = 0.05
-    ),
-
-    hr(),
-
-    radioButtons("n_ci",
-      "Number of confidence intervals:",
-      choices = c(10, 25, 50, 100),
-      selected = 50, inline = TRUE
-    ),
-
-    actionButton("go", "Go")
-  ),
-
-  # Show a plot of the generated distribution
-  mainPanel(
-    plotOutput("ci_plot")
-  )
-)</code></pre>
-<p>),</p>
-<p>server &lt;- function(input, output) {</p>
-<pre><code># set true p
-p &lt;- reactive(ifelse(input$success == "Yes", 0.62, 0.38))
-
-# create df_ci when go button is pushed
-df_ci &lt;- eventReactive(input$go, {
-  map_dfr(1:input$n_ci, store_ci,
-    n = input$n_samp,
-    reps = input$n_rep, conf_level = input$conf_level,
-    success = input$success
-  ) %&gt;%
-    mutate(
-      y_lower = 1:input$n_ci,
-      y_upper = 1:input$n_ci,
-      capture_p = ifelse(x_lower &lt; p() &amp; x_upper &gt; p(), "Yes", "No")
-    )
-})
-
-# plot df_ci
-output$ci_plot &lt;- renderPlot({
-  ggplot(df_ci()) +
-    geom_segment(aes(x = x_lower, y = y_lower, xend = x_upper, yend = y_upper, color = capture_p)) +
-    geom_point(aes(x = x_lower, y = y_lower, color = capture_p)) +
-    geom_point(aes(x = x_upper, y = y_upper, color = capture_p)) +
-    geom_vline(xintercept = p(), color = "darkgray") +
-    labs(
-      y = "", x = "Bounds of the confidence interval",
-      color = "Does the interval capture the true population proportion?"
-    ) +
-    theme(legend.position = "bottom")
-})</code></pre>
-<p>}, options = list(height = 700) ) ```</p>
+<p>Doing this would require learning programming concepts like iteration so that you can automate repeating running the code you’ve developed so far many times to obtain many (50) confidence intervals. In order to keep the programming simpler, please render the interactive app that basically does this for you and creates a plot similar to Figure 5.6 on OpenIntro Statistics, 4th Edition (page 182).</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
